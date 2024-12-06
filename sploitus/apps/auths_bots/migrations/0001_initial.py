@@ -12,14 +12,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Check',
+            name='TelegramBot',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('vulnerability_name', models.CharField(max_length=200)),
-                ('vulnerability_dicription', models.TextField(blank=True, null=True)),
-                ('date_of_publication', models.DateTimeField()),
-                ('link_to_the_source', models.TextField()),
-                ('exploits_and_poc', models.TextField(blank=True, null=True)),
+                ('name', models.CharField(max_length=100, unique=True)),
+                ('token', models.CharField(max_length=255, unique=True)),
+                ('is_active', models.BooleanField(default=True)),
             ],
         ),
     ]

@@ -1,12 +1,12 @@
 import axios from 'axios'
 
-const axiosInstance = axios.create({
+const authBotAxios = axios.create({
 	baseURL: 'http://172.20.10.4:8000/',
 })
 
-axiosInstance.interceptors.request.use(
+authBotAxios.interceptors.request.use(
 	config => {
-		const token = localStorage.getItem('token')
+		const token = localStorage.getItem('access_token')
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`
 		}
@@ -15,4 +15,4 @@ axiosInstance.interceptors.request.use(
 	error => Promise.reject(error)
 )
 
-export default axiosInstance
+export default authBotAxios

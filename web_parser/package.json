@@ -6,10 +6,12 @@
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "formik-yup": "^0.0.5",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "framer-motion": "^11.13.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.2",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "react-transition-group": "^4.4.5"
   },
   "scripts": {
     "start": "react-scripts start",

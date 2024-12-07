@@ -8,6 +8,7 @@ class TelegramBot(models.Model):
     token = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
     api_key = models.CharField(max_length=150, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_bots', null=True)
 

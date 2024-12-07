@@ -10,6 +10,9 @@ from drf_yasg.utils import swagger_auto_schema
 from .serilizers import TelegramBotSerializer
 from rest_framework.views import APIView
 import hashlib
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class RegisterBotView(APIView):
@@ -52,7 +55,15 @@ class RegisterBotView(APIView):
             return JsonResponse({'message': 'Bot already registered.','api_key': api_key})
 
 
+class TelegramBotList(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
 
+    def get(self, request):
+        telegrambot = TelegramBot.objects.all()
+        serializer = TelegramBotSerializer(telegrambot, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
 # class ProtectedEndpointView(View):
 #     def get(self, request):
 #         # Проверяем наличие токена в заголовке запроса

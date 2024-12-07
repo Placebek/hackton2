@@ -9,7 +9,8 @@ class TelegramBotAdmin(admin.ModelAdmin):
     list_display = (
         "name",  
         "token",    
-        "is_active",  
+        "is_active", 
+        "created_at", 
     )
 
     ordering = ("-id",)

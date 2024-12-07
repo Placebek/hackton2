@@ -6,14 +6,34 @@ from .serializers import *
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer 
 
     @swagger_auto_schema(
-    operation_description="Регистрация пользователя",
-    responses={200: UserRegistrationSerializer(many=True)},
+        operation_description="Регистрация нового пользователя.",
+        request_body=UserRegistrationSerializer,
+        responses={
+            201: openapi.Response(
+                description="Пользователь успешно зарегистрирован.",
+                examples={
+                    "application/json": {
+                        "message": "Пользователь успешно зарегистрирован!"
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Ошибка валидации.",
+                examples={
+                    "application/json": {
+                        "username": ["Это поле обязательно."],
+                        "password": ["Пароль слишком короткий."]
+                    }
+                }
+            )
+        },
     )
 
     def post(self, request):
@@ -27,8 +47,27 @@ class UserRegistrationView(generics.CreateAPIView):
 class UserLoginView(APIView):
 
     @swagger_auto_schema(
-    operation_description="Аутентификация пользователя",
-    responses={200: UserLoginSerializer(many=True)},
+        operation_description="Аутентификация пользователя и выдача JWT-токенов.",
+        request_body=UserLoginSerializer,
+        responses={
+            200: openapi.Response(
+                description="Успешный вход пользователя.",
+                examples={
+                    "application/json": {
+                        "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                        "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Ошибка аутентификации.",
+                examples={
+                    "application/json": {
+                        "non_field_errors": ["Неверные учетные данные."]
+                    }
+                }
+            )
+        },
     )
 
     def post(self, request):

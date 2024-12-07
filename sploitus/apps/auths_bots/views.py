@@ -13,6 +13,7 @@ import hashlib
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
+from drf_yasg import openapi
 
 
 class RegisterBotView(APIView):
@@ -20,8 +21,32 @@ class RegisterBotView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-    operation_description="Добавление нового бота",
-    responses={200: TelegramBotSerializer(many=True)},
+        operation_description="Добавление нового Telegram-бота. Проверяет токен через Telegram API и сохраняет бота в базе данных.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'name': openapi.Schema(type=openapi.TYPE_STRING, description='Название бота'),
+                'token': openapi.Schema(type=openapi.TYPE_STRING, description='Токен Telegram-бота')
+            },
+            required=['name', 'token'],
+        ),
+        responses={
+            200: openapi.Response(
+                description="Бот успешно зарегистрирован",
+                examples={
+                    "application/json": {
+                        "message": "Бот успешно зарегистрирован!",
+                        "api_key": "hashed_api_key"
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Ошибка валидации или проблемы с токеном",
+                examples={
+                    "application/json": {"error": "Invalid JSON format"}
+                }
+            )
+        }
     )
 
     def post(self, request):
@@ -60,8 +85,29 @@ class TelegramBotList(generics.ListAPIView):
     serializer_class = TelegramBotSerializer
 
     @swagger_auto_schema(
-    operation_description="Отображает всех ботов пользователя",
-    responses={200: TelegramBotSerializer(many=True)},
+        operation_description="Возвращает список всех зарегистрированных Telegram-ботов пользователя.",
+        responses={
+            200: openapi.Response(
+                description="Список всех Telegram-ботов",
+                schema=TelegramBotSerializer(many=True),
+                examples={
+                    "application/json": [
+                        {
+                            "id": 1,
+                            "name": "BotName1",
+                            "token": "Token1",
+                            "api_key": "hashed_api_key1"
+                        },
+                        {
+                            "id": 2,
+                            "name": "BotName2",
+                            "token": "Token2",
+                            "api_key": "hashed_api_key2"
+                        }
+                    ]
+                }
+            )
+        }
     )
 
     def get(self, request):
@@ -69,17 +115,3 @@ class TelegramBotList(generics.ListAPIView):
         serializer = TelegramBotSerializer(telegrambot, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    
-# class ProtectedEndpointView(View):
-#     def get(self, request):
-#         # Проверяем наличие токена в заголовке запроса
-#         auth_header = request.headers.get('Authorization', '')
-#         if not auth_header.startswith('Bearer '):
-#             return JsonResponse({'error': 'Unauthorized'}, status=401)
-
-#         token = auth_header.split(' ')[1]
-#         try:
-#             bot = TelegramBot.objects.get(bot_token=token, is_active=True)
-#             return JsonResponse({'message': 'Access granted to the bot.'})
-#         except TelegramBot.DoesNotExist:
-#             return JsonResponse({'error': 'Unauthorized'}, status=401)

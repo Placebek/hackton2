@@ -4,7 +4,7 @@ from . import models
 
 
 class UserAdmin(admin.ModelAdmin):
-    model = models.User
+    model = models.CustomUser
 
     readonly_fields = ()
     list_display = (
@@ -14,7 +14,7 @@ class UserAdmin(admin.ModelAdmin):
 
     ordering = ("-id",)
 
-admin.site.register(models.User, UserAdmin)
+admin.site.register(models.CustomUser, UserAdmin)
 
 
 

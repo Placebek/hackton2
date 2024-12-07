@@ -16,10 +16,29 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework import permissions
+
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="CHECK TO THE DOMAIN",
+        default_version='v1',
+        description="DESCRIPTION",
+        terms_of_service="https://www.check_to_the_domain.com/terms/",
+        contact=openapi.Contact(email="ermekulysaken8@gmail.com"),
+        license=openapi.License(name="The license is only for my colleges"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('check/', include('apps.vulnerability_check.urls')),
     path('auths/', include('apps.auths.urls')),
     path('auths_bots/', include('apps.auths_bots.urls')),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0),name='swagger-schema'),
 ]

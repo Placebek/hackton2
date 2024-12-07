@@ -4,9 +4,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from .serializers import *
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.views import APIView
 
 
-class UserRegistrationView(generics.ListAPIView):
+class UserRegistrationView(generics.CreateAPIView):
+    serializer_class = UserRegistrationSerializer 
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
@@ -15,7 +17,7 @@ class UserRegistrationView(generics.ListAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-class UserLoginView(generics.ListAPIView):
+class UserLoginView(APIView):
     def post(self, request):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():

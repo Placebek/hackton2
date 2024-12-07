@@ -23,12 +23,12 @@ from rest_framework import permissions
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="CHECK TO THE DOMAIN",
+        title="Руководство",
         default_version='v1',
-        description="DESCRIPTION",
+        description="ОПИСАНИЕ:  Документация для API с запросами и ответами",
         terms_of_service="https://www.check_to_the_domain.com/terms/",
         contact=openapi.Contact(email="ermekulysaken8@gmail.com"),
-        license=openapi.License(name="The license is only for my colleges"),
+        license=openapi.License(name="Лицензия для всех пользователей"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),

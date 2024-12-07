@@ -43,11 +43,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'daphne',
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
     'drf_yasg',
+    'django_celery_beat',
+    'django_celery_results',
+    'channels',
 
     'apps.vulnerability_check',
     'apps.auths',
@@ -86,7 +90,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sploitus.wsgi.application'
 
-
+ASGI_APPLICATION = 'sploitus.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -101,6 +105,15 @@ DATABASES = {
     }
 }
 
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -153,7 +166,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -162,3 +175,7 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL='auths.CustomUser'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # URL для подключения к Redis
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Хранение результатов также в Redis
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'

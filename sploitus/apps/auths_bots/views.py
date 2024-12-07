@@ -20,7 +20,7 @@ class RegisterBotView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-    operation_description="Создание нового бота",
+    operation_description="Добавление нового бота",
     responses={200: TelegramBotSerializer(many=True)},
     )
 
@@ -34,7 +34,7 @@ class RegisterBotView(APIView):
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
 
         if not name or not token:
-            return JsonResponse({'error': 'Both name and token are required'}, status=400)
+            return JsonResponse({'error': 'Требуются имя бота и токен'}, status=400)
 
         # Проверка токена через Telegram API
         response = requests.get(f'https://api.telegram.org/bot{token}/getMe')
@@ -50,13 +50,19 @@ class RegisterBotView(APIView):
         )
 
         if created:
-            return JsonResponse({'message': 'Bot successfully registered.', 'api_key': api_key})
+            return JsonResponse({'message': 'Бот успешно зарегистрирован!.', 'api_key': api_key})
         else:
-            return JsonResponse({'message': 'Bot already registered.','api_key': api_key})
+            return JsonResponse({'message': 'Бот таким токеном уже существует!'}, status=400)
 
 
 class TelegramBotList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = TelegramBotSerializer
+
+    @swagger_auto_schema(
+    operation_description="Отображает всех ботов пользователя",
+    responses={200: TelegramBotSerializer(many=True)},
+    )
 
     def get(self, request):
         telegrambot = TelegramBot.objects.all()

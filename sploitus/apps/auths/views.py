@@ -5,10 +5,17 @@ from rest_framework.response import Response
 from .serializers import *
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
+from drf_yasg.utils import swagger_auto_schema
 
 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer 
+
+    @swagger_auto_schema(
+    operation_description="Регистрация пользователя",
+    responses={200: UserRegistrationSerializer(many=True)},
+    )
+
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
@@ -18,6 +25,12 @@ class UserRegistrationView(generics.CreateAPIView):
     
 
 class UserLoginView(APIView):
+
+    @swagger_auto_schema(
+    operation_description="Аутентификация пользователя",
+    responses={200: UserLoginSerializer(many=True)},
+    )
+
     def post(self, request):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():

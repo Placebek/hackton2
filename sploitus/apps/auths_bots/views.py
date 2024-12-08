@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views import View
 from django.conf import settings
-from .models import TelegramBot  # Модель, где хранятся токены ботов
+from .models import TelegramBot  
 import requests
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -17,11 +17,10 @@ from drf_yasg import openapi
 
 
 class RegisterBotView(APIView):
-    # serializer_class = TelegramBotSerializer
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="Добавление нового Telegram-бота. Проверяет токен через Telegram API и сохраняет бота в базе данных.",
+        operation_description="Добавление нового Telegram-бота. Проверяет токен через Telegram API и выдаст ApiKey",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -50,7 +49,6 @@ class RegisterBotView(APIView):
     )
 
     def post(self, request):
-        # Парсим данные JSON из тела запроса
         try:
             data = json.loads(request.body)
             name = data.get('name')
@@ -61,14 +59,12 @@ class RegisterBotView(APIView):
         if not name or not token:
             return JsonResponse({'error': 'Требуются имя бота и токен'}, status=400)
 
-        # Проверка токена через Telegram API
         response = requests.get(f'https://api.telegram.org/bot{token}/getMe')
         if response.status_code != 200:
             return JsonResponse({'error': 'Invalid token'}, status=400)
 
         api_key = hashlib.sha256(token.encode()).hexdigest()
 
-        # Сохраняем бота в базе данных
         bot, created = TelegramBot.objects.get_or_create(
             name=name,
             defaults={'token': token, 'api_key': api_key}

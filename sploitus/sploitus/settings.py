@@ -66,7 +66,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'apps.auths.middleware.TelegramBotAuthMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
 
@@ -176,6 +175,6 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL='auths.CustomUser'
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'  # URL для подключения к Redis
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Хранение результатов также в Redis
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0' 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'

@@ -113,10 +113,17 @@ cd <название_папки>
 [
     {
         "id": 1,
-        "title": "Remote Code Execution",
-        "description": "Critical RCE vulnerability in XYZ service",
-        "date_published": "2024-12-01",
-        "source_link": "https://sploitus.com/xyz"
+        "request": "Ss7",
+        "vuln_title": "Exploit for CVE-2022-32862",
+        "vuln_date": "2023-09-13",
+        "vuln_sample": "Exploit",
+        "sploitus_id": "90FFF58A-EDFA-5C1A-B7A4-2FE763FECB06",
+        "vulnerability_indicator": 5.5,
+        "description": "## https://sploitus.com/exploit?id=90FFF58A-EDFA-5C1A-B7A4-2FE763FECB06\n%PDF-1.5\n%\ufffd\ufffd\ufffd\ufffd\n16 0 obj\n<<\n/Length 972 \n/Filter /FlateDecode\n>>\nstream..mvwmwklrmlermmtbjnjbenbjlkevkjlwmwkjdvnwkjvnwrkjnvkrnvkj.",
+        "task_interval": 5,
+        "sample": 'Exploit',
+        "user": null,
+        "vuln_tool": 1
     }
 ]
 ```

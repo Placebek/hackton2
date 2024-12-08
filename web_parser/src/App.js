@@ -7,7 +7,7 @@ import ShowBots from './components/bots/ShowBots'
 
 function App() {
 	return (
-		<div className='flex flex-col min-h-screen bg-[#6F94B6]'>
+		<div className='flex flex-col min-h-screen bg-gradient-to-b from-[#FFFFFF] to-[#999999]'>
 			<Routes>
 				<Route
 					path='/'
